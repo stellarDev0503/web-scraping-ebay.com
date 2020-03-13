@@ -24,7 +24,7 @@ class EbaySpider(scrapy.Spider):
 	# Parse the search results
 	def parse_link(self, response):
 		# Extract the list of products 
-		results = response.xpath('//li[@class="s-item   "]')
+		results = response.xpath('//div/div/ul/li[contains(@class, "s-item" )]')
 		
 		# Extract info for each product
 		for product in results:		
@@ -45,7 +45,6 @@ class EbaySpider(scrapy.Spider):
 			status = product.xpath('.//*[@class="SECONDARY_INFO"]/text()').extract_first()
 			seller_level = product.xpath('.//*[@class="s-item__etrs-text"]/text()').extract_first()
 			location = product.xpath('.//*[@class="s-item__location s-item__itemLocation"]/text()').extract_first()
-			link = product.xpath('.//a[@class="s-item__link"]/@href').extract_first()
 
 			# Set default values
 			stars = 0
@@ -63,8 +62,7 @@ class EbaySpider(scrapy.Spider):
 			#"Location":location,
 			"Price":price,
 			"Stars":stars,
-			"Ratings":ratings,
-			"Link":link
+			"Ratings":ratings
 			}
 				
 		# Get the next page
